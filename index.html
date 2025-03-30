@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgive Me</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      margin-top: 10%;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.2s ease; 
+    }
+
+    #yes-btn {
+      background-color: green;
+      color: white;
+    }
+
+    #no-btn {
+      background-color: red;
+      color: white;
+    }
+
+    .forgiven-message {
+      display: none;
+      font-size: 2rem;
+      color: white;
+      background: red;
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="question">Please forgive me?</h1>
+    <button id="yes-btn">Yes</button>
+    <button id="no-btn">No</button>
+    <div id="message" class="forgiven-message"></div>
+  </div>
+
+  <script>
+    const questionElement = document.getElementById('question');
+    const yesButton = document.getElementById('yes-btn');
+    const noButton = document.getElementById('no-btn');
+    const messageElement = document.getElementById('message');
+
+    let forgivenessLevel = 0;
+
+    function moveNoButton() {
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      const buttonWidth = noButton.offsetWidth;
+      const buttonHeight = noButton.offsetHeight;
+
+      const randomX = Math.random() * (windowWidth - buttonWidth);
+      const randomY = Math.random() * (windowHeight - buttonHeight);
+
+      noButton.style.position = 'absolute';
+      noButton.style.left = `${randomX}px`;
+      noButton.style.top = `${randomY}px`;
+    }
+
+    yesButton.addEventListener('click', () => {
+      questionElement.style.display = 'none';
+      yesButton.style.display = 'none';
+      noButton.style.display = 'none';
+      messageElement.textContent = 'Thank you for forgiving me! I love you so much ❤️';
+      messageElement.style.display = 'block';
+    });
+
+    noButton.addEventListener('click', () => {
+      forgivenessLevel++;
+      if (forgivenessLevel === 1) {
+        questionElement.textContent = 'Baby Sorry Man Jao!';
+      } else if (forgivenessLevel === 2) {
+        questionElement.textContent = 'Maan Jao Na Please!';
+      } else if (forgivenessLevel === 3) {
+        questionElement.textContent = 'Baby Abse ni hoga Sorry!';
+      } else if (forgivenessLevel === 4) {
+        questionElement.textContent = 'Le ab krle No?';
+        noButton.addEventListener('mouseover', moveNoButton);
+      }
+    });
+  </script>
+</body>
+</html>
