@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +11,31 @@
       text-align: center;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      background-color: #ce8282;
+      overflow: hidden;
     }
 
     .container {
       margin-top: 10%;
+    }
+
+    .div {
+      background: transparent;
+      padding: 20px;
+      border: #ce8282;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 90%;
+      max-width: 550px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin: auto;
+      color: aliceblue;
+
     }
 
     h1 {
@@ -29,7 +50,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      transition: transform 0.2s ease; 
+      transition: transform 0.2s ease;
     }
 
     #yes-btn {
@@ -38,26 +59,77 @@
     }
 
     #no-btn {
-      background-color: red;
+      background-color: rgb(228, 10, 10);
       color: white;
     }
 
     .forgiven-message {
       display: none;
       font-size: 2rem;
-      color: white;
-      background: red;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 50;
+    }
+
+    .glow {
+      font-size: 60px;
+      color: #fff;
+      text-align: center;
+      animation: glow 1s ease-in-out infinite alternate;
+    }
+
+    @-webkit-keyframes glow {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+      }
+
+      to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+      }
+    }
+
+    .particle {
+      position: absolute;
+      font-size: 24px;
+      animation: fall 6s linear forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+      }
+
+      .forgiven-message {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1 id="question">Please forgive me?</h1>
-    <button id="yes-btn">Yes</button>
-    <button id="no-btn">No</button>
-    <div id="message" class="forgiven-message"></div>
+    <div class="div">
+      <h1 id="question">Please forgive me?</h1>
+      <button id="yes-btn">Yes ✅ </button>
+      <button id="no-btn">No ❌</button>
+    </div>
+    <div id="message" class="forgiven-message glow"></div>
   </div>
 
   <script>
@@ -65,7 +137,6 @@
     const yesButton = document.getElementById('yes-btn');
     const noButton = document.getElementById('no-btn');
     const messageElement = document.getElementById('message');
-
     let forgivenessLevel = 0;
 
     function moveNoButton() {
@@ -82,27 +153,65 @@
       noButton.style.top = `${randomY}px`;
     }
 
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.innerHTML = Math.random() > 0.5 ? '❤️' : '🌸';
+      document.body.appendChild(particle);
+
+      const startPosX = Math.random() * window.innerWidth;
+      particle.style.left = `${startPosX}px`;
+      particle.style.top = `0px`;
+      particle.style.fontSize = `${Math.random() * 20 + 20}px`;
+
+      let startTime = null;
+
+      function animateParticle(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+
+        const progress = Math.min(elapsed / 6000, 1);
+        particle.style.transform = `translateY(${progress * window.innerHeight}px) rotate(${progress * 360}deg)`;
+        particle.style.opacity = 1 - progress;
+
+        if (progress < 1) {
+          requestAnimationFrame(animateParticle);
+        } else {
+          particle.remove();
+        }
+      }
+
+      requestAnimationFrame(animateParticle);
+    }
+
     yesButton.addEventListener('click', () => {
+      for (let i = 0; i < 30; i++) {
+        setTimeout(createParticle, i * 100);
+      }
+      document.body.style.backgroundColor = '#ffcccb';
+      const divContainer = document.querySelector('.div');
+      divContainer.style.display = 'none';
       questionElement.style.display = 'none';
       yesButton.style.display = 'none';
       noButton.style.display = 'none';
-      messageElement.textContent = 'Thank you for forgiving me! I love you so much ❤️';
+      messageElement.innerHTML = 'Thank you so much for forgiving me 💋 <br> I love you so much 🫂❤️';
       messageElement.style.display = 'block';
     });
 
     noButton.addEventListener('click', () => {
       forgivenessLevel++;
       if (forgivenessLevel === 1) {
-        questionElement.textContent = 'Baby Sorry Man Jao!';
+        questionElement.textContent = 'Baby Sorry Please Man Jao na 🥺';
       } else if (forgivenessLevel === 2) {
-        questionElement.textContent = 'Maan Jao Na Please!';
+        questionElement.textContent = 'Baby Abse ni hoga 😭';
       } else if (forgivenessLevel === 3) {
-        questionElement.textContent = 'Baby Abse ni hoga Sorry!';
+        questionElement.textContent = 'Maan Jao Na Please 🙏';
       } else if (forgivenessLevel === 4) {
-        questionElement.textContent = 'Le ab krle No?';
+        questionElement.innerHTML = `Le ab krle No 😝 <br> Jaldi se Yes dbao 🤭 `;
         noButton.addEventListener('mouseover', moveNoButton);
       }
     });
   </script>
 </body>
+
 </html>
